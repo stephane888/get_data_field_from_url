@@ -1,0 +1,8 @@
+name: get data field from url
+type: module
+description: permet de recuperer la valeur d&#039;un champs charger dans l&#039;url, use by paragraph.
+package: Custom
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - paragraphs

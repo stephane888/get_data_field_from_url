@@ -1,0 +1,7 @@
+get_data_field_from_url.settings_form:
+  path: '/admin/config/system/get-data-field-from-url'
+  defaults:
+    _title: 'get data field from url settings'
+    _form: 'Drupal\get_data_field_from_url\Form\SettingsForm'
+  requirements:
+    _permission: 'administer get_data_field_from_url configuration'

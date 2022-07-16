@@ -1,0 +1,6 @@
+get_data_field_from_url.settings_form:
+  title: get data field from url
+  description: Configure get data field from url.
+  parent: system.admin_config_system
+  route_name: get_data_field_from_url.settings_form
+  weight: 10
