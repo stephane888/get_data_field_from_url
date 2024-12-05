@@ -16,17 +16,19 @@ use Drupal\Core\Entity\EntityInterface;
  * )
  */
 class getDataFieldLayoutBlock extends BlockBase {
-  
+
+
   /**
    *
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
     return [
-      'field_name' => ''
+      'field_name' => '',
+      'field_formatter' => ''
     ];
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -37,17 +39,23 @@ class getDataFieldLayoutBlock extends BlockBase {
       '#title' => $this->t(' Nom du champs '),
       '#default_value' => $this->configuration['field_name']
     ];
+    $form['field_formatter'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t(' id du formatter à utiliser '),
+      '#default_value' => $this->configuration['field_formatter']
+    ];
     return $form;
   }
-  
+
   /**
    *
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['field_name'] = $form_state->getValue('field_name');
+    $this->configuration['field_formatter'] = $form_state->getValue('field_formatter');
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -56,6 +64,7 @@ class getDataFieldLayoutBlock extends BlockBase {
     $route_name = \Drupal::routeMatch()->getRouteName();
     $route_match = \Drupal::routeMatch()->getParameters()->all();
     $field_name = $this->configuration['field_name'];
+    $field_formatter = $this->configuration["field_formatter"];
     /**
      *
      * @var \Drupal\node\Entity\Node $entity
@@ -68,6 +77,16 @@ class getDataFieldLayoutBlock extends BlockBase {
          * @var \Drupal\Core\Field\FieldItemList $field
          */
         $field = $entity->{$field_name};
+        if ($field_formatter) {
+          $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
+          $view = $view_builder->viewField($field, [
+            'label' => 'hidden',
+            'type' => $field_formatter, // Set the formatter here
+            'settings' => [],
+            'weight' => 0,
+          ]);
+          return $view;
+        }
         return $field->view([
           'label' => 'hidden'
         ]);
@@ -80,5 +99,4 @@ class getDataFieldLayoutBlock extends BlockBase {
     ];
     return $build;
   }
-  
 }
