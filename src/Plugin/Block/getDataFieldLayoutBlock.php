@@ -65,11 +65,19 @@ class getDataFieldLayoutBlock extends BlockBase {
     $route_match = \Drupal::routeMatch()->getParameters()->all();
     $field_name = $this->configuration['field_name'];
     $field_formatter = $this->configuration["field_formatter"];
-    /**
-     *
-     * @var \Drupal\node\Entity\Node $entity
-     */
-    $entity = reset($route_match);
+    $entity = null;
+    if ($route_name ==  "entity.taxonomy_term.canonical") {
+      /**
+       * @var \Drupal\taxonomy\Entity\Term
+       */
+      $entity = $route_match["taxonomy_term"];
+    } else {
+      /**
+       *
+       * @var \Drupal\node\Entity\Node $entity
+       */
+      $entity = reset($route_match);
+    }
     if (!empty($entity) && $entity instanceof EntityInterface) {
       if ($entity->hasField($field_name)) {
         /**
