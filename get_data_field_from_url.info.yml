@@ -4,4 +4,4 @@ description: permet de recuperer la valeur d&#039;un champs charger dans l&#039;
 package: Custom
 core_version_requirement: ^9 || ^10
 dependencies:
-  - paragraphs
+  - paragraphs:paragraphs
