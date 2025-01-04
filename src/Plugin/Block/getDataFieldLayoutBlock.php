@@ -16,8 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
  * )
  */
 class getDataFieldLayoutBlock extends BlockBase {
-
-
+  
   /**
    *
    * {@inheritdoc}
@@ -25,10 +24,11 @@ class getDataFieldLayoutBlock extends BlockBase {
   public function defaultConfiguration() {
     return [
       'field_name' => '',
-      'field_formatter' => ''
+      'field_formatter' => '',
+      'show_label' => false
     ];
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -44,9 +44,14 @@ class getDataFieldLayoutBlock extends BlockBase {
       '#title' => $this->t(' id du formatter à utiliser '),
       '#default_value' => $this->configuration['field_formatter']
     ];
+    $form['show_label'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t(' Show label '),
+      '#default_value' => $this->configuration['show_label']
+    ];
     return $form;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -54,8 +59,9 @@ class getDataFieldLayoutBlock extends BlockBase {
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['field_name'] = $form_state->getValue('field_name');
     $this->configuration['field_formatter'] = $form_state->getValue('field_formatter');
+    $this->configuration['show_label'] = $form_state->getValue('show_label');
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -65,13 +71,16 @@ class getDataFieldLayoutBlock extends BlockBase {
     $route_match = \Drupal::routeMatch()->getParameters()->all();
     $field_name = $this->configuration['field_name'];
     $field_formatter = $this->configuration["field_formatter"];
+    $show_label = $this->configuration["show_label"];
     $entity = null;
-    if ($route_name ==  "entity.taxonomy_term.canonical") {
+    if ($route_name == "entity.taxonomy_term.canonical") {
       /**
+       *
        * @var \Drupal\taxonomy\Entity\Term
        */
       $entity = $route_match["taxonomy_term"];
-    } else {
+    }
+    else {
       /**
        *
        * @var \Drupal\node\Entity\Node $entity
@@ -85,26 +94,21 @@ class getDataFieldLayoutBlock extends BlockBase {
          * @var \Drupal\Core\Field\FieldItemList $field
          */
         $field = $entity->{$field_name};
+        $display_options = [
+          'label' => $show_label ? 'above' : 'hidden'
+        ];
         if ($field_formatter) {
-          $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
-          $view = $view_builder->viewField($field, [
-            'label' => 'hidden',
-            'type' => $field_formatter, // Set the formatter here
+          $display_options += [
+            'type' => $field_formatter,
             'settings' => [],
-            'weight' => 0,
-          ]);
-          return $view;
+            'weight' => 0
+          ];
         }
         return $field->view([
-          'label' => 'hidden'
+          $display_options
         ]);
       }
     }
-    $build['title'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'h1',
-      '#value' => "mjkfjj ikuj"
-    ];
-    return $build;
+    return [];
   }
 }
