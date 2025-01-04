@@ -104,9 +104,7 @@ class getDataFieldLayoutBlock extends BlockBase {
             'weight' => 0
           ];
         }
-        return $field->view([
-          $display_options
-        ]);
+        return $field->view($display_options);
       }
     }
     return [];
