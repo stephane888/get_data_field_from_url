@@ -11,8 +11,8 @@ use Drupal\Core\Entity\EntityInterface;
  *
  * @Block(
  *   id = "get_data_field_from_url_field",
- *   admin_label = @Translation(" get data field Layout "),
- *   category = @Translation("get data field from url")
+ *   admin_label = @Translation(" Get data by fieldname "),
+ *   category = @Translation("content")
  * )
  */
 class getDataFieldLayoutBlock extends BlockBase {
@@ -109,4 +109,18 @@ class getDataFieldLayoutBlock extends BlockBase {
     }
     return [];
   }
+  
+  /**
+   * Le cache varie par URL et par session utilisateur
+   *
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return [
+      'url.path',
+      'user.roles',
+      'languages:language_interface'
+    ];
+  }
+  
 }
