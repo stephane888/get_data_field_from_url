@@ -4,7 +4,7 @@ namespace Drupal\get_data_field_from_url\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Provides an example block.
@@ -87,7 +87,7 @@ class getDataFieldLayoutBlock extends BlockBase {
        */
       $entity = reset($route_match);
     }
-    if (!empty($entity) && $entity instanceof EntityInterface) {
+    if (!empty($entity) && $entity instanceof ContentEntityInterface) {
       if ($entity->hasField($field_name)) {
         /**
          *
